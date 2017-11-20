@@ -14,33 +14,38 @@
 
 		function min_cost(house, color) { // 이전 집에 도색된 색을 제외한 가장 저렴한 색의 비용을 반환
 			switch(color) {
-			case 'a' : return Math.min(house[1], house[2]); break;
-			case 'b' : return Math.min(house[0], house[2]); break;
-			case 'c' : return Math.min(house[0], house[1]); break;			
+				case 'a' : return Math.min(house[1], house[2]); break;
+				case 'b' : return Math.min(house[0], house[2]); break;
+				case 'c' : return Math.min(house[0], house[1]); break;			
 			}
 		}
 
-        function minimum_cost(houses) {
-			var result = 0;
-			var a = houses[houses.length-1][0];
-			var b = houses[houses.length-1][1];
-			var c = houses[houses.length-1][2];
-			var color = ['a', 'b', 'c'];
+        function minimum_cost(houses) {			
+			var result = 0;			
 
-			for(var i = houses.length-2; i >= 0; i--) {
-				a += min_cost(houses[i], color[0]);
-				b += min_cost(houses[i], color[1]);
-				c += min_cost(houses[i], color[2]);
-				
-				for(var j = 0; j < 3; j++) {
-					color[j] = min_color(houses[i], min_cost(houses[i], color[j]));
-				}				
+			for(var n = 0; n < 2; n++) { 
+				var a = houses[0][0];
+				var b = houses[0][1];
+				var c = houses[0][2];
+				var color = ['a', 'b', 'c'];
+
+				for(var i = 1; i < houses.length; i++) {
+					a += min_cost(houses[i], color[0]);
+					b += min_cost(houses[i], color[1]);
+					c += min_cost(houses[i], color[2]);
+
+					for(var j = 0; j < 3; j++) {
+						color[j] = min_color(houses[i], min_cost(houses[i], color[j]));
+					}				
+				}
+
+				houses.reverse();
+				(n == 0) ? result = Math.min(a, b, c) : result = Math.min(a, b, c, result);			
 			}
-
-			result = Math.min(a, b, c);
 
 			return result;
         }
+
         var test_case_01 = [[26, 40, 83], [49, 60, 57], [13, 89, 99]];
         var test_case_02 = [[1, 20, 30], [50, 5, 6], [9, 3, 7]];
         var test_case_03 = [[100, 1, 100], [999, 1, 999]];
@@ -48,6 +53,7 @@
         var test_case_05 = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15], [16, 17, 18]];
         var test_case_06 = [[26, 40, 83], [0, 60, 57], [0, 0, 0]];
         var test_case_07 = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [20, 100, 10]];
+		var test_error = [[9, 3, 7], [50, 5, 6], [1, 20, 30]]; // 에러 테스트 배열 추가
 
         expect(minimum_cost(test_case_01), 96);
         expect(minimum_cost(test_case_02), 10);
@@ -56,6 +62,7 @@
         expect(minimum_cost(test_case_05), 54);
         expect(minimum_cost(test_case_06), 40);
         expect(minimum_cost(test_case_07), 10);
+		expect(minimum_cost(test_error), 10); // 에러 테스트 (2번과 같은 결과값)
 
         function expect(l, r) {
             if (l === r)
