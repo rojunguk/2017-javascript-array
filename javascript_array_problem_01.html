@@ -4,7 +4,16 @@
     <script type="text/javascript">
         function calculate(arr) {
           var result = 0;
-          // TODO : 여기에 여러분이 직접 코딩을 해주세요.       
+
+		  for(var i = 0; i < arr.length-1; i++) {
+			  if(typeof(arr[i]) == 'string') {
+				  (arr[i] == '+') ? arr[i+1] = arr[i-1] + arr[i+1] : false;
+				  (arr[i] == '-') ? arr[i+1] = arr[i-1] - arr[i+1] : false;
+				  (arr[i] == '*') ? arr[i+1] = arr[i-1] * arr[i+1] : false;
+			  }
+		  }
+		  result = arr[arr.length-1];
+
           return result;
         }
 

@@ -2,10 +2,44 @@
 <html>
 <head>
     <script type="text/javascript">
+		function min_color(house, cost) { // °¡Àå Àú·ÅÇÑ »öÀ» ¹ÝÈ¯
+			for(var i = 0; i < 3; i++) {
+				if(house[i] == cost) {
+					if(i == 0) return 'a';
+					if(i == 1) return 'b';
+					if(i == 2) return 'c';
+				}
+			}
+		}
+
+		function min_cost(house, color) { // ÀÌÀü Áý¿¡ µµ»öµÈ »öÀ» Á¦¿ÜÇÑ °¡Àå Àú·ÅÇÑ »öÀÇ ºñ¿ëÀ» ¹ÝÈ¯
+			switch(color) {
+			case 'a' : return Math.min(house[1], house[2]); break;
+			case 'b' : return Math.min(house[0], house[2]); break;
+			case 'c' : return Math.min(house[0], house[1]); break;			
+			}
+		}
+
         function minimum_cost(houses) {
-          var result = 0;
-          // TODO : ì—¬ê¸°ì— ì—¬ëŸ¬ë¶„ì´ ì§ì ‘ ì½”ë”©ì„ í•´ì£¼ì„¸ìš”.
-          return result;
+			var result = 0;
+			var a = houses[houses.length-1][0];
+			var b = houses[houses.length-1][1];
+			var c = houses[houses.length-1][2];
+			var color = ['a', 'b', 'c'];
+
+			for(var i = houses.length-2; i >= 0; i--) {
+				a += min_cost(houses[i], color[0]);
+				b += min_cost(houses[i], color[1]);
+				c += min_cost(houses[i], color[2]);
+				
+				for(var j = 0; j < 3; j++) {
+					color[j] = min_color(houses[i], min_cost(houses[i], color[j]));
+				}				
+			}
+
+			result = Math.min(a, b, c);
+
+			return result;
         }
         var test_case_01 = [[26, 40, 83], [49, 60, 57], [13, 89, 99]];
         var test_case_02 = [[1, 20, 30], [50, 5, 6], [9, 3, 7]];
